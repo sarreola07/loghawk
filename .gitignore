@@ -1,0 +1,11 @@
+# Secrets: never publish the API key
+.env
+# Raw security logs stay on this machine (only the generated report is published)
+security_log.txt
+security_log.csv
+*.log
+# Python / Jupyter clutter
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
