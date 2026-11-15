@@ -1,0 +1,29 @@
+title: Brute Force SSH with Privilege Escalation and Backdoor Account Creation
+id: 12345678-1234-1234-1234-123456789abc
+status: experimental
+description: Detects coordinated SSH brute-force attempts across multiple invalid/common usernames followed by privilege escalation and creation of a root-level backdoor account
+author: Detection Engineer
+date: 2024-07-25
+logsource:
+  product: linux
+  service: auth
+detection:
+  selection:
+    - EventID: 1001 # sshd: Failed password
+    - EventID: 1002 # sshd: Invalid user
+    - EventID: 1003 # sudo: privilege escalation
+    - EventID: 1004 # useradd: new user with UID 0
+  condition: (
+      (selection.EventID in (1001,1002) and selection.src_ip != null) 
+      and 
+      (selection.EventID == 1003 or selection.EventID == 1004)
+    )
+  timeframe: 30m
+fields:
+  - src_ip
+  - user
+  - command
+  - uid
+falsepositives:
+  - Legitimate admin activity (verify context)
+level: critical
