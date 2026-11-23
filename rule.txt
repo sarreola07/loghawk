@@ -1,0 +1,30 @@
+title: Suspicious Root Access and Backdoor User Creation
+id: 8f3e7a9d-4c2b-4f1a-9e8d-7b6c5a4d3b2c
+status: experimental
+description: Detects repeated failed SSH login attempts for privileged accounts (root, service accounts) combined with sensitive sudo commands (e.g., reading /etc/shadow) and creation of multiple users with UID/GID 0, indicating potential privilege escalation and backdoor installation.
+author: Detection Engineer
+date: 2024-07-25
+logsource:
+  product: linux
+  service: auth
+detection:
+  selection_sudo_shadow:
+    - message|contains: '/bin/cat /etc/shadow'
+    - message|contains: '/usr/bin/cat /etc/shadow'
+  selection_useradd_uid0:
+    - message|contains: 'new user:' and 'UID=0' and 'GID=0'
+  selection_ssh_failed_root:
+    - message|contains: 'Failed password for root'
+  selection_ssh_failed_service:
+    - message|contains: 'Failed password for '
+      message|contains: ' from '
+      message|not_contains: ' for root'
+  condition: (selection_sudo_shadow and selection_useradd_uid0) or (selection_ssh_failed_root and selection_ssh_failed_service) or (selection_useradd_uid0 and selection_ssh_failed_root)
+fields:
+  - host
+  - user
+  - command
+  - source_ip
+falsepositives:
+  - Legitimate system administration during incident response (ensure proper authorization and context)
+level: high

@@ -9,3 +9,5 @@ security_log.csv
 __pycache__/
 .ipynb_checkpoints/
 .DS_Store
+.pytest_cache/
+.semgrep/
