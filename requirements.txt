@@ -1,2 +1,6 @@
-openai
-jupyterlab
+# Runtime dependency
+openai>=1.0
+
+# Testing and static analysis (development)
+pytest>=7.0
+semgrep>=1.0
