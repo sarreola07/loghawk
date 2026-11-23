@@ -2,7 +2,30 @@
 
 A short walkthrough of LogHawk (`logtriage.py`) running end to end.
 
-**Recording:** DEMO_LINK_HERE
+**Demo format:** labeled screenshots of a real end-to-end session (the handout allows
+"a recording or clear screenshots"). Every image below is a screen capture of the
+command actually running on my machine against the class Qwen Coder server.
+
+### 1. The help: every option the CLI accepts
+![python logtriage.py --help](docs/demo/1-help.png)
+
+### 2. A full run on the 200-line SSH/sudo log, with a Sigma rule
+Command: `python logtriage.py --input ssh_auth_log.txt --output results.csv --json results.json --rule sigma --rule-out rule.txt`
+(the API key was loaded from a git-ignored `.env`, never shown on screen)
+
+![live run: Connected, label summary, Wrote lines](docs/demo/2-live-run.png)
+
+### 3. The detection rule the tool generated
+![rule.txt (top)](docs/demo/3a-rule-top.png)
+![rule.txt (bottom)](docs/demo/3b-rule-bottom.png)
+
+### 4. The offline tests passing
+![python -m pytest: 9 passed](docs/demo/4-pytest.png)
+
+### 5. Semgrep static analysis
+![semgrep scan --config auto logtriage.py: 0 findings](docs/demo/5-semgrep.png)
+
+---
 
 ## What the demo shows (2 to 3 minutes)
 1. Install and configure (the key is set off-screen and never shown):
